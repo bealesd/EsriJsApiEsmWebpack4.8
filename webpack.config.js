@@ -22,9 +22,22 @@ for (const filename of cssFilenames) {
 
 module.exports = {
   entry: entries,
+  
+  // allow an esm module output
+  // while experimental stick to compiling all esm module file to non module files for production, or using globals in non module code
+  experiments: {
+    outputModule: true,
+  },
+
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: '[name].js'
+    filename: '[name].js',
+
+    library: {
+      // esm output
+      // why - so we can use native esm in our project, and then call compiled webpack esm
+      type: "module",
+    },
   },
   optimization: {
     minimize: false,
@@ -53,14 +66,4 @@ module.exports = {
     })
   ],
 
-  devServer: {
-    static: [
-      {
-        directory: path.join(__dirname, 'src'),
-      },
-      {
-        directory: path.join(__dirname, 'dist'),
-      }
-    ]
-  }
 };
